@@ -13,6 +13,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 
+const styles = {
+  NavbarButtons: {
+    paddingLeft: '13px',
+    paddingRight: '13px'
+  }
+}
+
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -51,11 +58,17 @@ export default function AppAppBar() {
         <StyledToolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="small" href="/">
+              <Button variant="text" color="info" size="medium" href="/" style={styles.NavbarButtons}>
                 Home
               </Button>
-              <Button variant="text" color="info" size="small" href="/qb-reports">
+              <Button variant="text" color="info" size="medium" href="/qb-reports" style={styles.NavbarButtons}>
                 QuickBase Reports
+              </Button>
+              <Button variant="text" color="info" size="medium" href="/inventory" style={styles.NavbarButtons}>
+                Inventory
+              </Button>
+              <Button variant="text" color="info" size="medium" href="/part-master" style={styles.NavbarButtons}>
+                Part Master
               </Button>
             </Box>
           </Box>
@@ -105,6 +118,16 @@ export default function AppAppBar() {
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth href="/qb-reports">
                     QuickBase Reports
+                  </Button>
+                  </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth href="/inventory">
+                    Inventory
+                  </Button>
+                  </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth href="/part-master">
+                    Part Master
                   </Button>
                   </MenuItem>
                 <Divider sx={{ my: 3 }} />
