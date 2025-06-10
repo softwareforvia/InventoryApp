@@ -1,5 +1,7 @@
 /* Define Part Objects */
 
+import dayjs, { Dayjs } from "dayjs";
+
 export interface iPartMaster {
     partID: number,
     partNumber: string,
@@ -23,8 +25,8 @@ export interface iPartMaster {
     inspectionRequired: boolean,
     inspectionDetails: string,
     owner: string,
-    createdDate: Date,
-    lastModifiedDate: Date,
+    createdDate: Dayjs,
+    lastModifiedDate: Dayjs,
     lastModifiedBy: string,
     notes: string
 }
@@ -53,8 +55,8 @@ export const mapJSONtoPart = (raw: any) => {
         inspectionRequired: raw["Inspection Required"],
         inspectionDetails: raw["QA Inspection Details"],
         owner: raw["Owner"],
-        createdDate: new Date(raw["Created Date"]),
-        lastModifiedDate: new Date(raw["Last Modified Date"]),
+        createdDate: dayjs(new Date(raw["Created Date"])),
+        lastModifiedDate: dayjs(new Date(raw["Last Modified Date"])),
         lastModifiedBy: raw["Last Modified By"],
         notes: raw["Notes"]
     } as iPartMaster);

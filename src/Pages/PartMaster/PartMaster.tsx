@@ -6,6 +6,7 @@ import AppTheme from '../../shared-theme/AppTheme';
 import { Autocomplete, Box, Button, FormControl, MenuItem, Select, TextField } from '@mui/material'
 import { useEffect } from 'react';
 import { iPartMaster, mapJSONtoPart } from './PartInterface';
+import PartInfoCard from './PartInfoCard';
 
 const example = require('./DummyPartData.json');
 
@@ -23,44 +24,20 @@ const styles = {
   }
 }
 
-const emptyPart: iPartMaster = {
-  partID: 0,
-  partNumber: '',
-  revision: '',
-  partName: '',
-  partDescription: '',
-  unitMeasure: '',
-  conversion: '',
-  price: 0,
-  partCategory: '',
-  partFamily: '',
-  traceabilityInfo: '',
-  supplierPartNumber: '',
-  manufacturer: '',
-  vendor: '',
-  hazard: '',
-  storageRequirement: '',
-  packagingRequirement: '',
-  requireShelfLife: false,
-  shelfLife: '',
-  inspectionRequired: false,
-  inspectionDetails: '',
-  owner: '',
-  createdDate: new Date(),
-  lastModifiedDate: new Date(),
-  lastModifiedBy: '',
-  notes: ''
-}
-
 
 export default function PartMaster(props) {
-  const [partSelection, setPartSelection] = React.useState<iPartMaster | null>(emptyPart);
+  const [partSelection, setPartSelection] = React.useState<iPartMaster | null>(null);
   const [allParts, setAllParts] = React.useState<iPartMaster[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [displayPartInfo, setDisplayPartInfo] = React.useState(false);
 
   useEffect(() => {
     getPartList();
   }, [])
+
+  useEffect(() => {
+    setDisplayPartInfo(false);
+  }, [partSelection])
 
   async function getPartList() {
     setIsLoading(true);
@@ -89,36 +66,37 @@ export default function PartMaster(props) {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Autocomplete
-        sx={{ m: 1, width: 400, paddingBottom: '13px' }}
-        disabled={isLoading}
-        options={allParts}
-        getOptionLabel={(option: iPartMaster) => option.partNumber + ' | ' + option.partName}
-        autoComplete
-        selectOnFocus 
-        clearOnBlur 
-        includeInputInList
-        value={partSelection}
-        onChange={(event: any, newValue: iPartMaster | null) => {
-          setPartSelection(newValue)
-        }}
-        renderInput={(params) => (
-          <TextField 
-  slotProps={{
-    inputLabel: { 
-      sx: {
-        fontSize: "18px",
-        fontWeight: 550
-      }},
-  }}
-          {...params} 
-          label="Select a Part: Num | Name" 
-          variant="standard" />
-        )}
-      />
-        <Button variant="outlined" color="warning" size="large"
+        <Autocomplete
+          sx={{ m: 1, width: 400, paddingBottom: '13px' }}
+          disabled={isLoading}
+          options={allParts}
+          getOptionLabel={(option: iPartMaster) => option.partNumber + ' | ' + option.partName}
+          autoComplete
+          selectOnFocus
+          clearOnBlur
+          includeInputInList
+          value={partSelection}
+          onChange={(event: any, newValue: iPartMaster | null) => {
+            setPartSelection(newValue)
+          }}
+          renderInput={(params) => (
+            <TextField
+              slotProps={{
+                inputLabel: {
+                  sx: {
+                    fontSize: "18px",
+                    fontWeight: 550
+                  }
+                },
+              }}
+              {...params}
+              label="Select a Part: Num | Name"
+              variant="standard" />
+          )}
+        />
+        <Button variant="outlined" color="primary" size="large"
           disabled={!partSelection} loading={isLoading}
-          onClick={() => alert(JSON.stringify(partSelection))}>
+          onClick={() => setDisplayPartInfo(true)}>
           Get Part Info
         </Button>
       </div>
@@ -131,6 +109,9 @@ export default function PartMaster(props) {
       <AppAppBar />
       <Box style={styles.Box}>
         {PartDropdown}
+        {(partSelection && displayPartInfo) &&
+          <PartInfoCard partData={partSelection} isLoading={isLoading} setIsLoading={setIsLoading}>
+          </PartInfoCard>}
       </Box>
       <Footer />
     </AppTheme>

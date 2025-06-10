@@ -59,8 +59,7 @@ export default function Home(props) {
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <AppAppBar />
-      <Box style={styles.Box}
-      >
+      <Box style={styles.Box}>
         <Grid container spacing={4} columns={12} alignItems="center" justifyContent="center" >
           <Grid item size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
             {cardGen(<HomeIcon />, 'Home', 'Application Home Page', '')}
