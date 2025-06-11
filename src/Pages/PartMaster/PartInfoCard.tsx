@@ -12,9 +12,9 @@ const api = process.env.REACT_APP_BASE_URL;
 const styles = {
     Card: {
         marginTop: '30px',
-        maginBottom: '50px',
-        marginLeft: '50px',
-        marginRight: '50px',
+        maginBottom: '30px',
+        marginLeft: '30px',
+        marginRight: '30px',
         padding: '20px'
     },
     Header: {

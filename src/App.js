@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import QBReports from './Pages/QuickBase/QBReports' 
 import Inventory from './Pages/Inventory/Inventory' 
-import PartMaster from './Pages/PartMaster/PartMaster';
+import PartsPage from './Pages/PartMaster/PartsPage';
 
 function App() {
 
@@ -15,9 +15,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/inventory" element={<Inventory/>}/>
-        <Route path="/part-master" element={<PartMaster/>}/>
-        <Route path="/qb-reports" element={<QBReports/>}/>
+        <Route path="/inventory/*" element={<Inventory/>}/>
+        <Route path="/parts/*" element={<PartsPage/>}/>
+        <Route path="/qb-reports/*" element={<QBReports/>}/>
       </Routes>
     </BrowserRouter>
     </LocalizationProvider>

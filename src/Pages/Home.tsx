@@ -28,53 +28,54 @@ const styles = {
   }
 }
 
-const cardGen = (icon, title, text, href) => {
-  return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Card variant="outlined" sx={styles.Card}>
-        <CardActionArea component="a" href={href}>
-          <CardContent sx={styles.CardContent}>
-            <Typography gutterBottom sx={{ color: 'text.primary', fontSize: 20 }}>
-              {icon}
-              <br/>
-              {title}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 16 }}>
-              <br/>
-              {text}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Box>
-  );
-}
-
 export default function Home(props) {
+
+  const cardGen = (icon: any, title: string, text: string, href: string) => {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Card variant="outlined" sx={styles.Card}>
+          <CardActionArea component="a" href={href}>
+            <CardContent sx={styles.CardContent}>
+              <Typography gutterBottom sx={{ color: 'text.primary', fontSize: 20 }}>
+                {icon}
+                <br />
+                {title}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 16 }}>
+                <br />
+                {text}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Box>
+    );
+  }
+
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <AppAppBar />
       <Box style={styles.Box}>
         <Grid container spacing={4} columns={12} alignItems="center" justifyContent="center" >
-          <Grid item size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
             {cardGen(<HomeIcon />, 'Home', 'Application Home Page', '')}
           </Grid>
-          <Grid item size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
             {cardGen(<AssessmentIcon />, 'QuickBase Reports', 'Access and Generate Quickbase Reports', 'qb-reports')}
           </Grid>
-          <Grid item size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
             {cardGen(<InventoryIcon />, 'Inventory Manager', 'View and Manage Inventory Data', 'inventory')}
           </Grid>
-          <Grid item size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
-            {cardGen(<ConstructionIcon />, 'Part Master', 'Part Lookup and Managing', 'part-master')}
+          <Grid size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+            {cardGen(<ConstructionIcon />, 'Parts Manager', 'Part Master, Parts Viewer, Parts for Parts for all your needs!', 'parts')}
           </Grid>
-          <Grid item size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
-            {cardGen(<PersonAddAlt1Icon />, 'Users', 'View and Manage Users')}
+          <Grid size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+            {cardGen(<PersonAddAlt1Icon />, 'Users', 'View and Manage Users', '')}
           </Grid>
         </Grid>
       </Box>

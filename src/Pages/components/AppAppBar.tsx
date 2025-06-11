@@ -12,6 +12,7 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
+import Menu from '@mui/material/Menu';
 
 const styles = {
   NavbarButtons: {
@@ -38,10 +39,55 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navOpen = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+
+  const topBarOption = (page: string, route: string, menues: {name: string, route: string}[]) => {
+    return (
+      <>
+        <Button variant="text" color="info" size="medium"
+          id={route + "-button"}
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          style={styles.NavbarButtons}>
+          {page}
+        </Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={navOpen}
+          onClose={handleClose}
+          slotProps={{
+            list: {
+              'aria-labelledby': route + "-button",
+            },
+          }}
+        >
+          {menues.map((menu) => {
+            return(
+          <MenuItem onClick={handleClose}>
+            <Button variant="text" color="info" size="medium" href={"/" + route + "/" + menu.route}>
+              {menu.name}
+            </Button>
+          </MenuItem>
+            )
+          })}
+        </Menu>
+      </>
+    )
+  }
 
   return (
     <AppBar
@@ -67,9 +113,11 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="medium" href="/inventory" style={styles.NavbarButtons}>
                 Inventory
               </Button>
-              <Button variant="text" color="info" size="medium" href="/part-master" style={styles.NavbarButtons}>
-                Part Master
-              </Button>
+              {topBarOption('Parts', 'parts', [
+                {name: "Part Master", route: "part-master"}, 
+                {name: "Part Viewer", route: "parts-viewer"}, 
+                {name: "Create New Part", route: "part-master2"}
+              ])}
             </Box>
           </Box>
           <Box
@@ -114,22 +162,22 @@ export default function AppAppBar() {
                   <Button color="primary" variant="contained" fullWidth href="/">
                     Home
                   </Button>
-                  </MenuItem>
+                </MenuItem>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth href="/qb-reports">
                     QuickBase Reports
                   </Button>
-                  </MenuItem>
+                </MenuItem>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth href="/inventory">
                     Inventory
                   </Button>
-                  </MenuItem>
+                </MenuItem>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth href="/part-master">
                     Part Master
                   </Button>
-                  </MenuItem>
+                </MenuItem>
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>
                   <Button color="primary" variant="outlined" fullWidth>

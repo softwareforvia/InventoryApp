@@ -13,12 +13,6 @@ const example = require('./DummyPartData.json');
 const api = process.env.REACT_APP_BASE_URL;
 
 const styles = {
-  Box: {
-    paddingTop: '150px',
-    paddingBottom: '50px',
-    paddingLeft: '50px',
-    paddingRight: '50px'
-  },
   ReportGrid: {
     paddingTop: '20px',
   }
@@ -70,7 +64,7 @@ export default function PartMaster(props) {
           sx={{ m: 1, width: 400, paddingBottom: '13px' }}
           disabled={isLoading}
           options={allParts}
-          getOptionLabel={(option: iPartMaster) => option.partNumber + ' | ' + option.partName}
+          getOptionLabel={(option: iPartMaster) => option.partNumber + ' | ' + option.partName + ' | ' + option.revision}
           autoComplete
           selectOnFocus
           clearOnBlur
@@ -90,7 +84,7 @@ export default function PartMaster(props) {
                 },
               }}
               {...params}
-              label="Select a Part: Num | Name"
+              label="Select a Part: Num | Name | Rev"
               variant="standard" />
           )}
         />
@@ -104,16 +98,11 @@ export default function PartMaster(props) {
   );
 
   return (
-    <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <AppAppBar />
-      <Box style={styles.Box}>
+      <div>
         {PartDropdown}
         {(partSelection && displayPartInfo) &&
           <PartInfoCard partData={partSelection} isLoading={isLoading} setIsLoading={setIsLoading}>
           </PartInfoCard>}
-      </Box>
-      <Footer />
-    </AppTheme>
+      </div>
   );
 }
