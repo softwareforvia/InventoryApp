@@ -229,9 +229,6 @@ export const inputsCustomizations = {
         fontWeight: theme.typography.fontWeightMedium,
         letterSpacing: 0,
         color: (theme.vars || theme).palette.text.primary,
-        border: '1px solid ',
-        borderColor: gray[200],
-        backgroundColor: alpha(gray[50], 0.3),
         '&:hover': {
           backgroundColor: gray[100],
           borderColor: gray[300],
@@ -260,6 +257,16 @@ export const inputsCustomizations = {
               height: '2.25rem',
               padding: '0.25rem',
               [`& .${svgIconClasses.root}`]: { fontSize: '1rem' },
+            },
+          },
+          {
+            props: {
+              border: 'solid',
+            },
+            style: {
+              backgroundColor: alpha(gray[50], 0.3),
+              border: '1px solid ',
+              borderColor: gray[200],
             },
           },
           {

@@ -72,7 +72,7 @@ export default function Home(props) {
             {cardGen(<InventoryIcon />, 'Inventory Manager', 'View and Manage Inventory Data', 'inventory')}
           </Grid>
           <Grid size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
-            {cardGen(<ConstructionIcon />, 'Parts Manager', 'Part Master, Parts Viewer, Parts for Parts for all your needs!', 'parts')}
+            {cardGen(<ConstructionIcon />, 'Parts Manager', 'Part Master, Parts Viewer, Parts for Parts for all your partial Part needs!', 'parts')}
           </Grid>
           <Grid size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
             {cardGen(<PersonAddAlt1Icon />, 'Users', 'View and Manage Users', '')}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Autocomplete, Box, Button, FormControl, MenuItem, Select, TextField } from '@mui/material'
 import { useEffect } from 'react';
-import { iPartMaster, mapJSONtoPart } from './PartInterface';
+import { iPartData, mapJSONtoPart, mapPartsByRevision } from './PartInterface';
 import PartInfoCard from './PartInfoCard';
 
 const example = require('./DummyPartData.json');
@@ -9,8 +9,8 @@ const example = require('./DummyPartData.json');
 const api = process.env.REACT_APP_BASE_URL;
 
 export default function PartMaster(props) {
-  const [partSelection, setPartSelection] = React.useState<iPartMaster | null>(null);
-  const [allParts, setAllParts] = React.useState<iPartMaster[]>([]);
+  const [partSelection, setPartSelection] = React.useState<iPartData | null>(null);
+  const [allParts, setAllParts] = React.useState<iPartData[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [displayPartInfo, setDisplayPartInfo] = React.useState(false);
 
@@ -53,13 +53,13 @@ export default function PartMaster(props) {
           sx={{ m: 1, width: 400, paddingBottom: '13px' }}
           disabled={isLoading}
           options={allParts}
-          getOptionLabel={(option: iPartMaster) => option.partNumber + ' | ' + option.partName + ' | ' + option.revision}
+          getOptionLabel={(option: iPartData) => option.partNumber + ' | ' + option.partName + ' | ' + option.revision}
           autoComplete
           selectOnFocus
           clearOnBlur
           includeInputInList
           value={partSelection}
-          onChange={(event: any, newValue: iPartMaster | null) => {
+          onChange={(event: any, newValue: iPartData | null) => {
             setPartSelection(newValue)
           }}
           renderInput={(params) => (

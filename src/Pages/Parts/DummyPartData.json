@@ -29,8 +29,8 @@
   },
   {
     "Part ID": 2,
-    "Part Number": 1000002,
-    "Revision": "-",
+    "Part Number": 1000001,
+    "Revision": "B",
     "Part Name": "Flagship 4 Substrate",
     "Part Description": "Nadir UP010 P",
     "Unit of Measure": "ln ft",
@@ -50,7 +50,7 @@
     "Inspection Required": "",
     "QA Inspection Details": "",
     "Owner": "SOFTWARE TEST",
-    "Created Date": "6/5/2025",
+    "Created Date": "6/6/2025",
     "Last Modified Date": "6/5/2025",
     "Last Modified By": "Zara Yost",
     "Notes": ""
@@ -78,8 +78,8 @@
     "Inspection Required": "",
     "QA Inspection Details": "",
     "Owner": "SOFTWARE TEST",
-    "Created Date": "6/5/2025",
-    "Last Modified Date": "6/5/2025",
+    "Created Date": "3/5/2025",
+    "Last Modified Date": "3/5/2025",
     "Last Modified By": "Zara Yost",
     "Notes": ""
   },

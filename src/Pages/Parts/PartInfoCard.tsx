@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { PropsWithChildren, useEffect } from 'react';
-import { iPartMaster } from './PartInterface';
+import { iPartData } from './PartInterface';
 
 const api = process.env.REACT_APP_BASE_URL;
 
@@ -35,7 +35,7 @@ const styles = {
 }
 
 interface PartInfoProps extends PropsWithChildren<any> {
-    partData: iPartMaster,
+    partData: iPartData,
     isLoading: boolean,
     setIsLoading: Function
 }
@@ -43,7 +43,7 @@ interface PartInfoProps extends PropsWithChildren<any> {
 export default function PartInfoCard({ partData, isLoading, setIsLoading, children }: PartInfoProps) {
 
     const [disableEdits, setDisableEdits] = React.useState(true);
-    const [localPartData, setLocalPartData] = React.useState<iPartMaster>(partData);
+    const [localPartData, setLocalPartData] = React.useState<iPartData>(partData);
 
     const handlePartUpdate = (value, field) => {
         setLocalPartData({ ...localPartData, [field]: value });

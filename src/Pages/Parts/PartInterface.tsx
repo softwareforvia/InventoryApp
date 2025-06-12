@@ -3,7 +3,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import dayjs, { Dayjs } from "dayjs";
 
-export interface iPartMaster {
+export interface iPartData {
     partID: number,
     partNumber: string,
     revision: string,
@@ -60,56 +60,37 @@ export const mapJSONtoPart = (raw: any) => {
         lastModifiedDate: dayjs(new Date(raw["Last Modified Date"])),
         lastModifiedBy: raw["Last Modified By"],
         notes: raw["Notes"]
-    } as iPartMaster);
+    } as iPartData);
 }
 
-export const partGridColumns: GridColDef[] = [
-    {
-        field: 'partNumber',
-        headerName: 'Part Number',
-    },
-    {
-        field: 'revision',
-        headerName: 'Revision',
-    },
-    {
-        field: 'partName',
-        headerName: 'Part Name',
-    },
-    {
-        field: 'unitMeasure',
-        headerName: 'Unit',
-    },
-    {
-        field: 'conversion',
-        headerName: 'Unit Conversion',
-    },
-    {
-        field: 'price',
-        headerName: 'Part Price',
-    },
-    {
-        field: 'partCategory',
-        headerName: 'Part Category',
-    },
-    {
-        field: 'partFamily',
-        headerName: 'Part Family',
-    },
-    {
-        field: 'traceabilityInfo',
-        headerName: 'Traceability Metric',
-    },
-    {
-        field: 'supplierPartNumber',
-        headerName: 'Supplier Part Num',
-    },
-    {
-        field: 'manufacturer',
-        headerName: 'Manufacturer',
-    },
-    {
-        field: 'vendor',
-        headerName: 'Vendor',
-    },
-];
+export interface iPartsByRevision {
+    partNumber: string,
+    latestRev: string,
+    latestCreated: Dayjs,
+    partOptions: iPartData[] 
+}
+
+// group by revision so parts can be sorted later (and latest only can be displayed)
+export const mapPartsByRevision = (allParts: iPartData[]) => {
+    const newList: iPartsByRevision[] = [];
+
+    allParts.forEach((part) => {
+        const partInList = newList.find((revPart) => revPart.partNumber === part.partNumber);
+        if (partInList){
+            if (part.createdDate > partInList.latestCreated){
+                partInList.latestRev = part.revision;
+                partInList.latestCreated = part.createdDate;
+            } // update most recent rev data
+            partInList.partOptions.push(part); //always add part to options
+        }
+        else{
+            newList.push({
+                partNumber: part.partNumber, 
+                latestRev: part.revision, 
+                latestCreated: part.createdDate,
+                partOptions: [part]
+            }) //add new part to the list with only one revision
+        }
+    })
+    return newList;
+}

@@ -13,11 +13,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 import Menu from '@mui/material/Menu';
+import { gray } from '../../shared-theme/themePrimitives';
 
 const styles = {
   NavbarButtons: {
     paddingLeft: '13px',
     paddingRight: '13px'
+  },
+  BorderedButton: {
+    backgroundColor: alpha(gray[50], 0.3),
+    border: '1px solid ',
+    borderColor: gray[200],
   }
 }
 
@@ -52,7 +58,7 @@ export default function AppAppBar() {
     setOpen(newOpen);
   };
 
-  const topBarOption = (page: string, route: string, menues: {name: string, route: string}[]) => {
+  const topBarOption = (page: string, route: string, menues: { name: string, route: string }[]) => {
     return (
       <>
         <Button variant="text" color="info" size="medium"
@@ -76,12 +82,12 @@ export default function AppAppBar() {
           }}
         >
           {menues.map((menu) => {
-            return(
-          <MenuItem onClick={handleClose}>
-            <Button variant="text" color="info" size="medium" href={"/" + route + "/" + menu.route}>
-              {menu.name}
-            </Button>
-          </MenuItem>
+            return (
+              <MenuItem onClick={handleClose}>
+                <Button variant="text" color="info" size="medium" href={"/" + route + "/" + menu.route}>
+                  {menu.name}
+                </Button>
+              </MenuItem>
             )
           })}
         </Menu>
@@ -114,9 +120,9 @@ export default function AppAppBar() {
                 Inventory
               </Button>
               {topBarOption('Parts', 'parts', [
-                {name: "Part Master", route: "part-master"}, 
-                {name: "Part Viewer", route: "parts-viewer"}, 
-                {name: "Create New Part", route: "part-master2"}
+                { name: "Part Master", route: "part-master" },
+                { name: "Part Viewer", route: "parts-viewer" },
+                { name: "Create New Part", route: "part-master2" }
               ])}
             </Box>
           </Box>
@@ -130,10 +136,10 @@ export default function AppAppBar() {
             <Button color="primary" variant="text" size="small">
               Sign in
             </Button>
-            <ColorModeIconDropdown />
+            <ColorModeIconDropdown sx={styles.BorderedButton} />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
-            <ColorModeIconDropdown size="medium" />
+            <ColorModeIconDropdown sx={styles.BorderedButton} size="medium" />
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
