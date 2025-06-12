@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import QBReports from './Pages/QuickBase/QBReports' 
 import Inventory from './Pages/Inventory/Inventory' 
-import PartsPage from './Pages/PartMaster/PartsPage';
+import PartsPage from './Pages/Parts/PartsPage';
 
 function App() {
 

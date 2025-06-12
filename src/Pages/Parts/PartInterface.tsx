@@ -1,5 +1,6 @@
 /* Define Part Objects */
 
+import { GridColDef } from "@mui/x-data-grid";
 import dayjs, { Dayjs } from "dayjs";
 
 export interface iPartMaster {
@@ -61,3 +62,54 @@ export const mapJSONtoPart = (raw: any) => {
         notes: raw["Notes"]
     } as iPartMaster);
 }
+
+export const partGridColumns: GridColDef[] = [
+    {
+        field: 'partNumber',
+        headerName: 'Part Number',
+    },
+    {
+        field: 'revision',
+        headerName: 'Revision',
+    },
+    {
+        field: 'partName',
+        headerName: 'Part Name',
+    },
+    {
+        field: 'unitMeasure',
+        headerName: 'Unit',
+    },
+    {
+        field: 'conversion',
+        headerName: 'Unit Conversion',
+    },
+    {
+        field: 'price',
+        headerName: 'Part Price',
+    },
+    {
+        field: 'partCategory',
+        headerName: 'Part Category',
+    },
+    {
+        field: 'partFamily',
+        headerName: 'Part Family',
+    },
+    {
+        field: 'traceabilityInfo',
+        headerName: 'Traceability Metric',
+    },
+    {
+        field: 'supplierPartNumber',
+        headerName: 'Supplier Part Num',
+    },
+    {
+        field: 'manufacturer',
+        headerName: 'Manufacturer',
+    },
+    {
+        field: 'vendor',
+        headerName: 'Vendor',
+    },
+];

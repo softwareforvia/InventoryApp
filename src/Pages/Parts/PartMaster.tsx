@@ -1,8 +1,4 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppAppBar from '../components/AppAppBar';
-import Footer from '../components/Footer';
-import AppTheme from '../../shared-theme/AppTheme';
 import { Autocomplete, Box, Button, FormControl, MenuItem, Select, TextField } from '@mui/material'
 import { useEffect } from 'react';
 import { iPartMaster, mapJSONtoPart } from './PartInterface';
@@ -11,13 +7,6 @@ import PartInfoCard from './PartInfoCard';
 const example = require('./DummyPartData.json');
 
 const api = process.env.REACT_APP_BASE_URL;
-
-const styles = {
-  ReportGrid: {
-    paddingTop: '20px',
-  }
-}
-
 
 export default function PartMaster(props) {
   const [partSelection, setPartSelection] = React.useState<iPartMaster | null>(null);
