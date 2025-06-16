@@ -4,7 +4,6 @@ import AppAppBar from '../components/AppAppBar';
 import Footer from '../components/Footer';
 import AppTheme from '../../shared-theme/AppTheme';
 import { Box } from '@mui/material'
-const example = require('./exampleInventory.json');
 
 const api = process.env.REACT_APP_BASE_URL;
 
@@ -44,7 +43,7 @@ export default function Inventory(props) {
         throw new Error(`Response status: ${response.status}`);
       }
 
-      const json: any = example;
+      const json: any = {};
 
       setIsLoading(false);
 

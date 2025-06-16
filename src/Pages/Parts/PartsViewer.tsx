@@ -6,6 +6,7 @@ import { Button, Card, Tooltip } from '@mui/material';
 import PartInfoCard from './PartInfoCard';
 import { Dayjs } from 'dayjs';
 import CustomDataGridToolbar from '../components/CustomDataGridToolbar';
+import { renderButton, renderCustom } from '../components/DataGridUtils';
 
 const example = require('./DummyPartData.json');
 
@@ -30,39 +31,11 @@ export default function PartsViewer(props) {
     getPartList();
   }, [])
 
-  // view in part master when button for part clicked
-  const PartMasterButton = (params: GridRenderCellParams<any, string>) => {
-    return (
-      <Button
-        style={{ color: 'purple' }}
-        sx={{ textDecoration: 'underline' }}
-        onClick={() => setPartSelection(params.row)}>
-        {params.value}
-      </Button>
-    );
-  };
-
-  const renderCustom = (params: GridRenderCellParams<any, string>) => {
-    return (
-      <Tooltip title={params.value}>
-        <span>{params.value}</span>
-      </Tooltip>
-    );
-  };
-
-  const renderDate = (params: GridRenderCellParams<any, Dayjs>) => {
-    return (
-      <Tooltip title={params.value?.format('DD MMM YYYY hh:mm:ss a')}>
-        <span>{params.value?.format('DD MMM YYYY')}</span>
-      </Tooltip>
-    );
-  };
-
   const partGridColumns: GridColDef[] = [
     {
       field: 'partNumber',
       headerName: 'Part Number',
-      renderCell: PartMasterButton
+      renderCell: (params) => renderButton(params, setPartSelection)
     },
     {
       field: 'revision',
@@ -123,12 +96,12 @@ export default function PartsViewer(props) {
     {
       field: 'createdDate',
       headerName: 'Created Date',
-      renderCell: renderDate
+      renderCell: renderCustom
     },
     {
       field: 'lastModifiedDate',
       headerName: 'Last Modified',
-      renderCell: renderDate
+      renderCell: renderCustom
     },
   ];
 

@@ -1,34 +1,53 @@
 /* File of different reports, empty objects, and maps */
 
+import dayjs, { Dayjs } from "dayjs";
+import { renderCustom } from "../components/DataGridUtils";
+import { GridColDef } from "@mui/x-data-grid";
+
+// report selection
 export interface iQBReportSelect {
   reportName: string,
   tableID: string,
-  reportID: string
+  reportID: string,
+  dataMapper: (data) => any,
+  reportColumns: (dataRow) => GridColDef[]
 }
 
-export const qbReportOptions: iQBReportSelect[] = (
-  [
-    {
-      reportName: "PO Report",
-      tableID: 'brmcrtevy',
-      reportID: '91'
-    },
-    {
-      reportName: "Not Implemented",
-      tableID: 'brmcrtevy',
-      reportID: '111191'
-    },
-    {
-      reportName: "Third Option",
-      tableID: 'brmcrtevy',
-      reportID: '1243491'
-    }
-  ]
-);
+/* REPORTS SECTION */
+
+// All Generic Reports
+export const mapReportColumns = (rowOne: any) => {
+  const allFields = (Object.keys(rowOne).map((key) => {
+      return ({ field: key, headerName: key, renderCell: renderCustom })
+  }))
+  return allFields.filter((f) => f.field !== "uniqueGridID")
+}
+
+//Data for all generic reports
+export const mapReportData = (rawData: any) => {
+  let gridID = 1;
+  return rawData.map((row) => {
+    const oneRow = {};
+    Object.entries(row).forEach(([key, value]) => {
+        // date to dayjs
+        if(!isNaN((new Date(String(value))).valueOf())){
+          oneRow[key] = dayjs(new Date(String(value)));
+        }
+        else if(typeof value === 'object' && value !== null){
+          oneRow[key] = JSON.stringify(value);
+        }
+        else {
+          oneRow[key] = value;
+        }
+    })
+    oneRow["uniqueGridID"] = gridID++;
+    return oneRow;
+  })
+}
 
 //Report: MS - PO
-export interface iQBBaseReport {
-  DateCreated: Date,
+export interface iQBasePOReport {
+  DateCreated: Dayjs,
   RecordID: number,
   PONum: number,
   Approver: string,
@@ -41,32 +60,17 @@ export interface iQBBaseReport {
   ShipToName: string,
   Status: string,
   ShipToOption: string,
-  Receiver: string
+  Receiver: string,
+  uniqueGridID: number
 };
 
-export const emptyBaseReport = [{
-  DateCreated: new Date(),
-  RecordID: 0,
-  PONum: 0,
-  Approver: '',
-  Team: '',
-  Supplier: '',
-  ShippingCity: '',
-  Total: 0,
-  TotalValBilled: 0,
-  Requestor: '',
-  ShipToName: '',
-  Status: '',
-  ShipToOption: '',
-  Receiver: ''
-}];
-
-export const mapBaseReport = (rawData: any[]) => {
+export const mapBasePOReport = (rawData: any[]) => {
+  let gridID = 1;
   return rawData.map((raw: any) => {
-    const reportRow: iQBBaseReport =
+    const reportRow: iQBasePOReport =
     {
       Approver: raw['Approver Name'],
-      DateCreated: raw['Date Created'],
+      DateCreated: dayjs(raw['Date Created']),
       RecordID: raw['Record ID#'],
       PONum: raw['PO#'],
       Team: raw.Team,
@@ -78,8 +82,118 @@ export const mapBaseReport = (rawData: any[]) => {
       ShipToName: raw['Ship To Name'],
       Status: raw.Status,
       ShipToOption: raw['Ship To Option'],
-      Receiver: raw['Receiver - Full Name']
+      Receiver: raw['Receiver - Full Name'],
+      uniqueGridID: gridID++
     }
     return reportRow;
   });
 }
+
+export const basePOReportColumns: GridColDef[] = [
+  {
+    field: 'DateCreated',
+    headerName: 'Date Created',
+    renderCell: renderCustom
+  },
+  {
+    field: 'PONum',
+    headerName: 'PO Number',
+    renderCell: renderCustom
+  },
+  {
+    field: 'Approver',
+    headerName: 'Approver',
+    renderCell: renderCustom
+  },
+  {
+    field: 'Team',
+    headerName: 'Team',
+    renderCell: renderCustom
+  },
+  {
+    field: 'Supplier',
+    headerName: 'Supplier',
+    renderCell: renderCustom
+  },
+  {
+    field: 'ShippingCity',
+    headerName: 'Ship to City',
+    renderCell: renderCustom
+  },
+  {
+    field: 'Total',
+    headerName: 'PO Total',
+    renderCell: renderCustom
+  },
+  {
+    field: 'TotalValBilled',
+    headerName: 'Total Billed',
+    renderCell: renderCustom
+  },
+  {
+    field: 'Requestor',
+    headerName: 'Requestor',
+    renderCell: renderCustom
+  },
+  {
+    field: 'Status',
+    headerName: 'Status',
+    renderCell: renderCustom
+  },
+  {
+    field: 'ShipToOption',
+    headerName: 'Ship To',
+    renderCell: renderCustom
+  },
+  {
+    field: 'Receiver',
+    headerName: 'Receiver',
+    renderCell: renderCustom
+  },
+];
+
+/* END REPORTS SECTION */
+
+// we hard code the report options we provide. 
+// tableID, and reportID accessed from api thru https://github.com/tflanagan/node-quickbase?tab=readme-ov-file
+// all report options, even unmapped ones, should be entered here unless it's necessary to set dynamically
+// we set some of our reports dynamically because it's annoying and the queries aren't used elsewhere in the app
+export const qbReportOptions: iQBReportSelect[] = (
+  [
+    {
+      reportName: "PO Report",
+      tableID: 'brmcrtevy',
+      reportID: '91',
+      dataMapper: (data) =>mapBasePOReport(data),
+      reportColumns: (rowOne) => {return(basePOReportColumns)}
+    },
+    {
+      reportName: "Kodiak - All issued POs",
+      tableID: 'brmcrtevy',
+      reportID: '80',
+      dataMapper: (data) => mapReportData(data),
+      reportColumns: (rowOne) => mapReportColumns(rowOne)
+    },
+    {
+      reportName: "Team Members",
+      tableID: 'brvah5c7u',
+      reportID: '1',
+      dataMapper: (data) => mapReportData(data),
+      reportColumns: (rowOne) => mapReportColumns(rowOne)
+    },
+    {
+      reportName: "All Suppliers",
+      tableID: 'brmcrtfa4',
+      reportID: '5',
+      dataMapper: (data) => mapReportData(data),
+      reportColumns: (rowOne) => mapReportColumns(rowOne)
+    },
+    {
+      reportName: "Supplier Contact Info",
+      tableID: 'bru9cjtwx',
+      reportID: '1',
+      dataMapper: (data) => mapReportData(data),
+      reportColumns: (rowOne) => mapReportColumns(rowOne)
+    }
+  ]
+);

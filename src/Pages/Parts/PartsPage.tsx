@@ -7,6 +7,7 @@ import PartMaster from "./PartMaster";
 import { Route, useLocation, Routes, Navigate, Link } from "react-router-dom";
 import Inventory from "../Inventory/Inventory";
 import PartsViewer from "./PartsViewer";
+import SubmitNewPart from "./SubmitNewPart";
 
 
 const styles = {
@@ -46,7 +47,7 @@ export default function PartsPage(props) {
                     >
                         <Tab sx={{ fontSize: '20px', marginRight: '30px' }} component={Link} to="/parts/part-master" value="/parts/part-master" label="Part Master" />
                         <Tab sx={{ fontSize: '20px', marginRight: '30px' }} component={Link} to="/parts/parts-viewer" value="/parts/parts-viewer" label="Parts Viewer" />
-                        <Tab sx={{ fontSize: '20px' }} component={Link} to="/parts/part-master2" value="/parts/part-master2" label="Submit New Part" />
+                        <Tab sx={{ fontSize: '20px' }} component={Link} to="/parts/new-part" value="/parts/new-part" label="Submit New Part" />
                     </Tabs>
                 </Box>
             </div>
@@ -55,7 +56,7 @@ export default function PartsPage(props) {
                     <Route index element={<Navigate to="/parts/part-master" />} />
                     <Route path="/part-master" element={<PartMaster />} />
                     <Route path="/parts-viewer" element={<PartsViewer />} />
-                    <Route path="/part-master2" element={<PartMaster />} />
+                    <Route path="/new-part" element={<SubmitNewPart />} />
                 </Routes>
             </Card>
             <Footer />

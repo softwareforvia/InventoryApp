@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Grid, FormControl, TextField, InputLabel, Switch, Typography, Button } from '@mui/material'
+import { Card, Grid, FormControl, TextField, InputLabel, Switch, Typography, Button, Box } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -29,6 +29,10 @@ const styles = {
         justifyContent: 'flex-end',
         paddingTop: '20px'
     },
+    NewPartHeader: {
+        display: 'flex',
+        margin: '10px 60px 50px',
+    },
     ReportGrid: {
         paddingTop: '20px',
     }
@@ -37,12 +41,13 @@ const styles = {
 interface PartInfoProps extends PropsWithChildren<any> {
     partData: iPartData,
     isLoading: boolean,
-    setIsLoading: Function
+    setIsLoading: Function,
+    isNewPart?: boolean
 }
 
-export default function PartInfoCard({ partData, isLoading, setIsLoading, children }: PartInfoProps) {
+export default function PartInfoCard({ partData, isLoading, setIsLoading, isNewPart, children }: PartInfoProps) {
 
-    const [disableEdits, setDisableEdits] = React.useState(true);
+    const [disableEdits, setDisableEdits] = React.useState(isNewPart ? false : true);
     const [localPartData, setLocalPartData] = React.useState<iPartData>(partData);
 
     const handlePartUpdate = (value, field) => {
@@ -50,25 +55,48 @@ export default function PartInfoCard({ partData, isLoading, setIsLoading, childr
     };
 
     useEffect(() => {
-        setDisableEdits(true);
+        setDisableEdits(isNewPart ? false : true);
         setLocalPartData(partData);
     }, [partData])
 
     return (
         <Card style={styles.Card}>
             <Card variant="outlined">
-                <div style={styles.Header}>
-                    <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 25, paddingLeft: '50px' }}>
-                        {(disableEdits ? "Displaying Info" : "Editing Info") + " for Part Number: " + partData.partNumber}
-                    </Typography>
-                    <div>
+                {!isNewPart &&
+                    <div style={styles.Header}>
+                        <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 25, paddingLeft: '50px' }}>
+                            {(disableEdits ? "Displaying Info" : "Editing Info") + " for Part Number: " + partData.partNumber}
+                        </Typography>
+                        <div>
+                        </div>
+                        <Card variant="outlined" style={{ display: 'flex', flexDirection: 'row' }}>
+                            <InputLabel style={{ paddingTop: '9px' }}>Enable Edits</InputLabel>
+                            <Switch onChange={() => setDisableEdits(!disableEdits)} checked={!disableEdits} color="secondary" />
+                        </Card>
                     </div>
-                    <Card variant="outlined" style={{ display: 'flex', flexDirection: 'row' }}>
-                        <InputLabel style={{ paddingTop: '9px' }}>Enable Edits</InputLabel>
-                        <Switch onChange={() => setDisableEdits(!disableEdits)} checked={!disableEdits} color="secondary" />
-                    </Card>
-                </div>
+                }
+                {isNewPart && <div style={{margin: '20px 5px'}}>
+                    <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 25, paddingLeft: '50px' }}>
+                        Submit a New Part
+                    </Typography>
+                </div>}
                 <Grid container columnSpacing={3} rowSpacing={4} columns={20} alignItems="center" justifyContent="center" >
+                {isNewPart && 
+                    <Grid size={{  xs: 10, md: 8, lg: 5, xl: 4 }}>
+                        <InputLabel>Part Number</InputLabel>
+                        <TextField
+                            fullWidth
+                            multiline
+                            variant='standard'
+                            value={localPartData.partNumber}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                handlePartUpdate(event.target.value, 'partNumber');
+                            }}
+                        />
+                    </Grid>}
+                {isNewPart && 
+                    <Grid size={{  xs: 10, md: 12, lg: 15, xl: 16 }}>
+                    </Grid>}
                     <Grid size={{ xs: 10, md: 8, lg: 5, xl: 4 }}>
                         <InputLabel>Part Name</InputLabel>
                         <TextField
@@ -82,7 +110,7 @@ export default function PartInfoCard({ partData, isLoading, setIsLoading, childr
                             }}
                         />
                     </Grid>
-                    <Grid size={{ xs: 5, md: 3, lg: 2, xl: 1 }}>
+                    <Grid size={{ xs: 5, md: 3, lg: 2, xl: 2 }}>
                         <InputLabel>Revision</InputLabel>
                         <TextField
                             disabled={disableEdits}

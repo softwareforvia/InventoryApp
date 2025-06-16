@@ -3,9 +3,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppAppBar from '../components/AppAppBar';
 import Footer from '../components/Footer';
 import AppTheme from '../../shared-theme/AppTheme';
-import { Box, Button, MenuItem, FormControl, Select } from '@mui/material'
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { qbReportOptions, iQBBaseReport, emptyBaseReport, mapBaseReport, iQBReportSelect } from './QBReportInterfaces';
+import { Box, Button, MenuItem, FormControl, Select, Tooltip } from '@mui/material'
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { qbReportOptions, iQBasePOReport, mapBasePOReport, iQBReportSelect, basePOReportColumns, mapReportColumns } from './QBReportInterfaces';
+import CustomDataGridToolbar from '../components/CustomDataGridToolbar';
+import { renderCustom } from '../components/DataGridUtils';
+import { useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const api = process.env.REACT_APP_BASE_URL;
 
@@ -21,66 +26,15 @@ const styles = {
   }
 }
 
-const columns: GridColDef[] = [
-  {
-    field: 'DateCreated',
-    headerName: 'Date Created',
-  },
-  {
-    field: 'PONum',
-    headerName: 'PO Number',
-  },
-  {
-    field: 'Approver',
-    headerName: 'Approver',
-  },
-  {
-    field: 'Team',
-    headerName: 'Team',
-  },
-  {
-    field: 'Supplier',
-    headerName: 'Supplier',
-  },
-  {
-    field: 'ShippingCity',
-    headerName: 'Ship to City',
-  },
-  {
-    field: 'Total',
-    headerName: 'PO Total',
-  },
-  {
-    field: 'TotalValBilled',
-    headerName: 'Total Billed',
-  },
-  {
-    field: 'Requestor',
-    headerName: 'Requestor',
-  },
-  {
-    field: 'Status',
-    headerName: 'Status',
-  },
-  {
-    field: 'ShipToOption',
-    headerName: 'Ship To',
-  },
-  {
-    field: 'Receiver',
-    headerName: 'Receiver',
-  },
-];
-
-
 export default function QBReports(props) {
   const [reportSelection, setReportSelection] = React.useState<iQBReportSelect>();
   const [showDataGrid, setShowDataGrid] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [reportData, setReportData] = React.useState<iQBBaseReport[]>(emptyBaseReport);
+  const [reportData, setReportData] = React.useState<iQBasePOReport[]>([]);
+  const [reportColumns, setReportColumns] = React.useState<GridColDef[]>([]);
 
   const handleSelection = (event) => {
-    setReportSelection(event.target.value);
+    setReportSelection(qbReportOptions.find((i) => i.reportName === event.target.value));
   };
 
   const generateReport = () => {
@@ -91,20 +45,28 @@ export default function QBReports(props) {
     setIsLoading(true);
 
     const url = api + "report";
-    
+    const params = new URLSearchParams();
+    params.append("tableId", reportSelection?.tableID || '');
+    params.append("reportId", reportSelection?.reportID || '');
+
+    console.log(url + `?${params}`)
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(url + `?${params}`);
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
 
-      const json: iQBBaseReport[] = await response.json();
+      const json: any = await response.json();
 
       setIsLoading(false);
-      setReportData(mapBaseReport(json));
-      setShowDataGrid(true);
 
-      console.log(json);
+      //we must have a valid report selected to show data
+      if (reportSelection) {
+        setReportData(reportSelection.dataMapper(json));
+        setReportColumns(reportSelection.reportColumns(json[0]));
+        setShowDataGrid(true);
+      }
 
     } catch (error: any) {
       setIsLoading(false);
@@ -122,7 +84,7 @@ export default function QBReports(props) {
       }}>
         <FormControl sx={{ m: 1, width: 200 }}>
           <Select
-            value={reportSelection}
+            value={reportSelection?.reportName || ""}
             label="Select Report"
             onChange={handleSelection}
           >
@@ -131,16 +93,16 @@ export default function QBReports(props) {
             </MenuItem>
             {qbReportOptions?.map((report) => {
               return (
-                <MenuItem key={report.reportID} value={report.reportID}>
+                <MenuItem key={report.reportName} value={report.reportName || ""}>
                   {report.reportName}
                 </MenuItem>
               );
             })}
           </Select>
         </FormControl>
-        <Button variant="outlined" color="warning" size="large" 
-                disabled={!reportSelection} loading={isLoading} 
-                onClick={generateReport}>
+        <Button variant="outlined" color="warning" size="large"
+          disabled={!reportSelection} loading={isLoading}
+          onClick={generateReport}>
           Generate Report
         </Button>
       </div>
@@ -156,8 +118,12 @@ export default function QBReports(props) {
       <Box hidden={!showDataGrid} style={styles.ReportGrid}>
         <DataGrid
           rows={reportData}
-          columns={columns}
-          getRowId={(row) => row.RecordID}
+          columns={reportColumns}
+          getRowId={(row) => row.uniqueGridID}
+          slots={{
+            toolbar: CustomDataGridToolbar,
+          }}
+          showToolbar
           initialState={{
             pagination: {
               paginationModel: {
@@ -165,8 +131,7 @@ export default function QBReports(props) {
               },
             },
           }}
-          pageSizeOptions={[10]}
-          checkboxSelection
+          pageSizeOptions={[5, 10, 20, 50]}
         />
       </Box>
     </div>
