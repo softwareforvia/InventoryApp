@@ -3,11 +3,8 @@ import React from "react";
 import AppTheme from "../../shared-theme/AppTheme";
 import AppAppBar from "../components/AppAppBar";
 import Footer from "../components/Footer";
-import PartMaster from "./PartMaster";
 import { Route, useLocation, Routes, Navigate, Link } from "react-router-dom";
-import Inventory from "../Inventory/InventoryPage";
-import PartsViewer from "./PartsViewer";
-import SubmitNewPart from "./SubmitNewPart";
+import InventoryView from "./InventoryView";
 
 
 const styles = {
@@ -26,7 +23,7 @@ const styles = {
     }
 }
 
-export default function PartsPage(props) {
+export default function InventoryPage(props) {
     const { pathname } = useLocation();
 
     return (
@@ -45,18 +42,18 @@ export default function PartsPage(props) {
                         textColor="secondary"
                         indicatorColor="secondary"
                     >
-                        <Tab sx={{ fontSize: '20px', marginRight: '30px' }} component={Link} to="/parts/part-master" value="/parts/part-master" label="Part Master" />
-                        <Tab sx={{ fontSize: '20px', marginRight: '30px' }} component={Link} to="/parts/parts-viewer" value="/parts/parts-viewer" label="Parts Viewer" />
-                        <Tab sx={{ fontSize: '20px' }} component={Link} to="/parts/new-part" value="/parts/new-part" label="Submit New Part" />
+                        <Tab sx={{ fontSize: '18px', marginRight: '30px' }} component={Link} to="/inventory/inventory-view" value="/inventory/inventory-view" label="Inventory Viewer" />
+                        <Tab sx={{ fontSize: '18px', marginRight: '30px' }} component={Link} to="/inventory/locations" value="/inventory/locations" label="Manage Locations" />
+                        <Tab sx={{ fontSize: '18px' }} component={Link} to="/inventory/inventory-lookup" value="/inventory/inventory-lookup" label="Item Lookup" />
                     </Tabs>
                 </Box>
             </div>
             <Card variant="outlined" style={styles.ContentCard}>
                 <Routes>
-                    <Route index element={<Navigate to="/parts/part-master" />} />
-                    <Route path="/part-master" element={<PartMaster />} />
-                    <Route path="/parts-viewer" element={<PartsViewer />} />
-                    <Route path="/new-part" element={<SubmitNewPart />} />
+                    <Route index element={<Navigate to="/inventory/inventory-view" />} />
+                    <Route path="/locations" element={<InventoryView />} />
+                    <Route path="/inventory-view" element={<InventoryView />} />
+                    <Route path="/inventory-lookup" element={<InventoryView />} />
                 </Routes>
             </Card>
             <Footer />

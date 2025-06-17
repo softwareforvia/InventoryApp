@@ -14,6 +14,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 import Menu from '@mui/material/Menu';
 import { gray } from '../../shared-theme/themePrimitives';
+import TopBarOption from './TopBarOption';
 
 const styles = {
   NavbarButtons: {
@@ -45,55 +46,10 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const navOpen = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
-
-  const topBarOption = (page: string, route: string, menues: { name: string, route: string }[]) => {
-    return (
-      <>
-        <Button variant="text" color="info" size="medium"
-          id={route + "-button"}
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-          style={styles.NavbarButtons}>
-          {page}
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={navOpen}
-          onClose={handleClose}
-          slotProps={{
-            list: {
-              'aria-labelledby': route + "-button",
-            },
-          }}
-        >
-          {menues.map((menu) => {
-            return (
-              <MenuItem onClick={handleClose}>
-                <Button variant="text" color="info" size="medium" href={"/" + route + "/" + menu.route}>
-                  {menu.name}
-                </Button>
-              </MenuItem>
-            )
-          })}
-        </Menu>
-      </>
-    )
-  }
 
   return (
     <AppBar
@@ -116,14 +72,16 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="medium" href="/qb-reports" style={styles.NavbarButtons}>
                 QuickBase Reports
               </Button>
-              <Button variant="text" color="info" size="medium" href="/inventory" style={styles.NavbarButtons}>
-                Inventory
-              </Button>
-              {topBarOption('Parts', 'parts', [
+              <TopBarOption page={'Inventory'} route={'inventory'} menues={[
+                { name: "Inventory View", route: "inventory-view" },
+                { name: "Manage Locations", route: "locations" },
+                { name: "Inventory Lookup", route: "inventory-lookup" }
+              ]}></TopBarOption>
+              <TopBarOption page={'Parts'} route={'parts'} menues={[
                 { name: "Part Master", route: "part-master" },
                 { name: "Part Viewer", route: "parts-viewer" },
                 { name: "Submit New Part", route: "new-part" }
-              ])}
+              ]}></TopBarOption>
             </Box>
           </Box>
           <Box
@@ -175,12 +133,12 @@ export default function AppAppBar() {
                   </Button>
                 </MenuItem>
                 <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth href="/inventory">
+                  <Button color="primary" variant="contained" fullWidth href="/inventory/inventory-view">
                     Inventory
                   </Button>
                 </MenuItem>
                 <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth href="/part-master">
+                  <Button color="primary" variant="contained" fullWidth href="/parts/part-master">
                     Part Master
                   </Button>
                 </MenuItem>
