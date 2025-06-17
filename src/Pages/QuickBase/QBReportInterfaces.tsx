@@ -9,8 +9,8 @@ export interface iQBReportSelect {
   reportName: string,
   tableID: string,
   reportID: string,
-  dataMapper: (data) => any,
-  reportColumns: (dataRow) => GridColDef[]
+  dataMapper: (data: any) => any,
+  reportColumns: (dataRow: any) => GridColDef[]
 }
 
 /* REPORTS SECTION */
@@ -18,19 +18,20 @@ export interface iQBReportSelect {
 // All Generic Reports
 export const mapReportColumns = (rowOne: any) => {
   const allFields = (Object.keys(rowOne).map((key) => {
-      return ({ field: key, headerName: key, renderCell: renderCustom })
+      return ({ field: key, headerName: key, renderCell: renderCustom, flex: 1 })
   }))
   return allFields.filter((f) => f.field !== "uniqueGridID")
 }
 
-//Data for all generic reports
+// Data for all generic reports. More careful processing elsewhere for reports we care about
 export const mapReportData = (rawData: any) => {
   let gridID = 1;
   return rawData.map((row) => {
     const oneRow = {};
     Object.entries(row).forEach(([key, value]) => {
-        // date to dayjs
-        if(!isNaN((new Date(String(value))).valueOf())){
+        // date to dayjs... it pays to be cautious, so we don't catch all of these well
+        // but this is the only way I can get SOME dates at all without also catching numeric fields
+        if(dayjs(String(value), 'YYYY-MM-DD').isValid()){
           oneRow[key] = dayjs(new Date(String(value)));
         }
         else if(typeof value === 'object' && value !== null){
@@ -191,6 +192,13 @@ export const qbReportOptions: iQBReportSelect[] = (
     {
       reportName: "Supplier Contact Info",
       tableID: 'bru9cjtwx',
+      reportID: '1',
+      dataMapper: (data) => mapReportData(data),
+      reportColumns: (rowOne) => mapReportColumns(rowOne)
+    },
+    {
+      reportName: "PO Receipts",
+      tableID: 'bssi2yucd',
       reportID: '1',
       dataMapper: (data) => mapReportData(data),
       reportColumns: (rowOne) => mapReportColumns(rowOne)

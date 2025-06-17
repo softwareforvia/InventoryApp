@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Grid, FormControl, TextField, InputLabel, Switch, Typography, Button, Box } from '@mui/material'
+import { Card, Grid, TextField, InputLabel, Switch, Typography, Button } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -261,7 +261,7 @@ export default function PartInfoCard({ partData, isLoading, setIsLoading, isNewP
                         <InputLabel>Created Date</InputLabel>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                disabled={disableEdits}
+                                disabled
                                 value={localPartData.createdDate}
                                 defaultValue={dayjs(new Date())}
                                 onChange={(newValue) => {
@@ -276,7 +276,7 @@ export default function PartInfoCard({ partData, isLoading, setIsLoading, isNewP
                         <InputLabel>Last Modified</InputLabel>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                disabled={disableEdits}
+                                disabled
                                 value={localPartData.lastModifiedDate}
                                 defaultValue={dayjs(new Date())}
                                 onChange={(newValue) => {
@@ -290,7 +290,7 @@ export default function PartInfoCard({ partData, isLoading, setIsLoading, isNewP
                     <Grid size={{ xs: 5, md: 3, lg: 2, xl: 2 }}>
                         <InputLabel>Last Modified By</InputLabel>
                         <TextField
-                            disabled={disableEdits}
+                            disabled
                             fullWidth
                             variant='standard'
                             value={localPartData.lastModifiedBy}

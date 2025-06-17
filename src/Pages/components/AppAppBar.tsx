@@ -122,7 +122,7 @@ export default function AppAppBar() {
               {topBarOption('Parts', 'parts', [
                 { name: "Part Master", route: "part-master" },
                 { name: "Part Viewer", route: "parts-viewer" },
-                { name: "Create New Part", route: "part-master2" }
+                { name: "Submit New Part", route: "new-part" }
               ])}
             </Box>
           </Box>

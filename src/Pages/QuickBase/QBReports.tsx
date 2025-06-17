@@ -3,13 +3,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppAppBar from '../components/AppAppBar';
 import Footer from '../components/Footer';
 import AppTheme from '../../shared-theme/AppTheme';
-import { Box, Button, MenuItem, FormControl, Select, Tooltip } from '@mui/material'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { qbReportOptions, iQBasePOReport, mapBasePOReport, iQBReportSelect, basePOReportColumns, mapReportColumns } from './QBReportInterfaces';
+import { Box, Button, MenuItem, FormControl, Select } from '@mui/material'
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { qbReportOptions, iQBasePOReport, iQBReportSelect } from './QBReportInterfaces';
 import CustomDataGridToolbar from '../components/CustomDataGridToolbar';
-import { renderCustom } from '../components/DataGridUtils';
-import { useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 
 const api = process.env.REACT_APP_BASE_URL;
@@ -18,8 +15,8 @@ const styles = {
   Box: {
     paddingTop: '150px',
     paddingBottom: '50px',
-    paddingLeft: '50px',
-    paddingRight: '50px'
+    paddingLeft: '100px',
+    paddingRight: '100px'
   },
   ReportGrid: {
     paddingTop: '20px',
@@ -110,11 +107,7 @@ export default function QBReports(props) {
   );
 
   const ReportGrid = (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
+    <div>
       <Box hidden={!showDataGrid} style={styles.ReportGrid}>
         <DataGrid
           rows={reportData}
